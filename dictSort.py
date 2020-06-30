@@ -5,7 +5,7 @@ origin_str = "abcba"
 sort_list = ["abcba","bcba","cba","ba","a"]
 end = len(origin_str)-1
 start = 0
-
+file_name = "demo.txt"
 def quick_sort(sort_list,start,end):
     print(sort_list)
     while(start < end):
@@ -30,5 +30,6 @@ def partition(sort_list,start,end):
     sort_list[start] = tmp
     return start
 
+    
 
 quick_sort(sort_list,start,end)

@@ -1,11 +1,11 @@
 // C++版本实现快排
-#include "wordSort.h"
+#include "src/wordSort.h"
 #include <iostream>
 #include <vector>
 using namespace std;
 int main(){
-		cout<<"hello world!"<<endl;
-		vector<string> test = {"test"};
+		string demoStr = "北京你好";
 		WordSort ws;
-		ws.quickSort(test, 0, 8);
+		ws.string2Arr(demoStr);
+
 }

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-//获取PAT数组
+//获取PAT数组和LCP数组
 vector<string> WordSort::sortArr(vector<string> wordList) {
     vector<string> originWordList = wordList;
     vector<int> patArr(wordList.size(), 0);
@@ -24,7 +24,10 @@ vector<string> WordSort::sortArr(vector<string> wordList) {
         cout << word << ",";
     }
     cout << endl;
-    return wordList;
+    for(auto word : wordList) {
+        cout << word << ",";
+    }
+    cout << endl;return wordList;
 }
 
 //将pat数组转为lcp数组

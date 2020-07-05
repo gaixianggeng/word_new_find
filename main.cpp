@@ -5,9 +5,9 @@
 #include <vector>
 using namespace std;
 int main() {
-    string demoStr = "北京你好早上好";
+    string demoStr = "abcba";
     WordSort ws;
     vector<string> cutWordList = ws.string2Arr(demoStr);
-	ws.quickSort(cutWordList,0,cutWordList.size());
+	ws.sortArr(cutWordList);
 
 }

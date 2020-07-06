@@ -7,6 +7,7 @@ class WordSort {
 public:
     vector<string> string2Arr(string);
     vector<string> sortArr(vector<string>);
+    void scanLcp(vector<int>,int,int,int,int);
     void test();
 
 private:

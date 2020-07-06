@@ -27,7 +27,10 @@ vector<string> WordSort::sortArr(vector<string> wordList) {
     for(auto word : wordList) {
         cout << word << ",";
     }
-    cout << endl;return wordList;
+    cout << endl;
+	
+	scanLcp(lcpArr, lcpArr.size(), 0, 2, 6);
+    return wordList;
 }
 
 //将pat数组转为lcp数组
@@ -37,8 +40,75 @@ vector<int> WordSort::pat2LcpArr(vector<int> patArr, vector<string> wordList) {
         int len = getCommonStrLength(wordList[patArr[i]], wordList[patArr[i + 1]]);
         res.push_back(getCommonStrLength(wordList[patArr[i]], wordList[patArr[i + 1]]));
     }
-	res.push_back(0);
+    res.push_back(0);
     return res;
+}
+
+
+//通过lcp数组获取词频
+void WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int maxLen) {
+    int left = start;
+    while (left <= count - 1) {
+        int lcpStart = left;
+        bool isFirst = true;
+        bool isLarge = true;
+        bool isContinue = true;
+
+        int j = 0;
+        int i = left;
+
+        for (; i < count; i++) {
+            //查过成词的最大长度
+            if (lcpArr[i] > maxLen) {
+                left += 1;
+                break;
+            }
+            if (isFirst) {
+                if (i - 1 >= 0) {
+                    if (lcpArr[i - 1] >= lcpArr[i]) {
+                        for (int k = i - 1; k >= 0; k--) {
+                            if (lcpArr[k] >= minLen && lcpArr[k] != lcpArr[i]) {
+                                j += 1;
+                            } else {
+                                if (lcpArr[k] == lcpArr[i]) {
+                                    isContinue = false;
+                                    j = 0;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (lcpArr[i] >= minLen && lcpArr[i] >= lcpArr[left] && isContinue) {
+                if (isFirst) {
+                    lcpStart = i;
+                    isFirst = false;
+                }
+                if (isLarge && lcpArr[i] > lcpArr[lcpStart]) {
+                    left = i;
+                    isLarge = false;
+
+                }
+            } else {
+                if ((isFirst && lcpArr[i] < minLen) || !isContinue) {
+                    left = i + 1;
+                } else {
+                    if(isLarge && lcpArr[i] < lcpArr[lcpStart]) {
+                        left = i;
+                    }
+                    if (lcpArr[lcpStart] <= maxLen) {
+                        int position = lcpStart;
+                        int times = (i - lcpStart) + 1 + j;
+                        cout << "position:" << position << endl;
+                        cout << "times:" << times << endl;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
 }
 
 

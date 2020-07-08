@@ -1,11 +1,14 @@
 //实现标题数据抽词排序
 
 #include "wordSort.h"
+#include <cstdlib>
+#include <iterator>
+#include <map>
 #include <string>
 #include <vector>
 
 //获取PAT数组和LCP数组
-vector<string> WordSort::sortArr(vector<string> wordList) {
+map<string, int> WordSort::sortArr(vector<string> wordList) {
     vector<string> originWordList = wordList;
     vector<int> patArr(wordList.size(), 0);
     int i = 0;
@@ -19,18 +22,30 @@ vector<string> WordSort::sortArr(vector<string> wordList) {
         cout << word << ",";
     }
     cout << endl;
+    for(auto word : wordList) {
+        cout << word << "," << endl;;
+    }
+    cout << wordList.size() << endl;
     vector<int> lcpArr = pat2LcpArr(patArr, originWordList);
     for(auto word : lcpArr) {
         cout << word << ",";
     }
     cout << endl;
-    for(auto word : wordList) {
-        cout << word << ",";
+    map<string, int> cutWordList;
+    vector<vector<int>> wordRate = scanLcp(lcpArr, lcpArr.size(), 0, 2, 6);
+    for(auto wordPosition : wordRate) {
+        cout << wordList[wordPosition[0]] << endl;
+        string cutWord	= wordList[wordPosition[0]].substr(0, lcpArr[wordPosition[0]]);
+        cutWordList[cutWord] = wordPosition[1];
     }
-    cout << endl;
 
-    scanLcp(lcpArr, lcpArr.size(), 0, 2, 6);
-    return wordList;
+    map<string, int>::iterator iter;
+    iter = cutWordList.begin();
+    for(iter = cutWordList.begin(); iter != cutWordList.end(); iter++) {
+        cout << iter->first << " " << iter->second << endl;
+    }
+    cout << cutWordList["习近平"] << endl;
+    return cutWordList;
 }
 
 //将pat数组转为lcp数组
@@ -43,50 +58,21 @@ vector<int> WordSort::pat2LcpArr(vector<int> patArr, vector<string> wordList) {
     res.push_back(0);
     return res;
 }
-//通过lcp数组获取词频 new
-void WordSort::getWordListByScanLcp(vector<int> lcpArr, int count, int start, int minLen, int maxLen) {
-    while(start < count) {
-        int left = -1;
-        int right = -1;
-        int lcpStart = 0;
-        int length = 0;
-        for(int i = start; i < count; i++) {
-            if(lcpArr[i] >= minLen) {
-                left = i;
-            }
-            if (left != -1 && lcpArr[i] > lcpArr[left]) {
-                lcpStart = i;
-            }
-            if (left != -1 && lcpArr[i] < lcpArr[left]) {
-                right = i;
-            }
-
-        }
-		cout<<"left:"<<left<<" right:"<<right<<" lcpStart:"<<lcpStart<<endl;
-        if (lcpStart != -1 && lcpStart < right) {
-            start = lcpStart;
-        } else {
-            start = right;
-        }
-        if (left != -1 && right != -1) {
-            length = right - left + 1;
-        } else if (left == -1) {
-            length = 0;
-        } else if (left != -1 && right == -1) {
-            length = count - left;
-        }
-    }
-}
 
 
 //通过lcp数组获取词频
-void WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int maxLen) {
+vector<vector<int>> WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int maxLen) {
+    vector<vector<int>> wordRate;
+    for(auto num : lcpArr) {
+        cout << num;
+    }
+    cout << endl;
     int left = start;
     while (left <= count - 1) {
         int lcpStart = left;
-        bool isFirst = true;
-        bool isLarge = true;
-        bool isContinue = true;
+        bool isFirst = true;//表示起点
+        bool isLarge = true;//判断是否找到比起点值大的数据
+        bool isContinue = true;//用来标识之前是都已经计算过
 
         int j = 0;
         int i = left;
@@ -101,9 +87,11 @@ void WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int
                 if (i - 1 >= 0) {
                     if (lcpArr[i - 1] >= lcpArr[i]) {
                         for (int k = i - 1; k >= 0; k--) {
-                            if (lcpArr[k] >= minLen && lcpArr[k] != lcpArr[i]) {
+                            //之前的数据比当前更大
+                            if (lcpArr[k] >= minLen && lcpArr[k] > lcpArr[i]) {
                                 j += 1;
                             } else {
+                                //如果出现相等 直接略过 说明之前已经计算过
                                 if (lcpArr[k] == lcpArr[i]) {
                                     isContinue = false;
                                     j = 0;
@@ -114,20 +102,23 @@ void WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int
                     }
                 }
             }
-            if (lcpArr[i] >= minLen && lcpArr[i] >= lcpArr[left] && isContinue) {
+            if (lcpArr[i] >= minLen && lcpArr[i] >= lcpArr[lcpStart] && isContinue) {
                 if (isFirst) {
                     lcpStart = i;
                     isFirst = false;
                 }
+                //获取第一个比start大数所在的位置，设置为left 即下一轮起点。
                 if (isLarge && lcpArr[i] > lcpArr[lcpStart]) {
                     left = i;
                     isLarge = false;
 
                 }
             } else {
+                //匹配到最后
                 if ((isFirst && lcpArr[i] < minLen) || !isContinue) {
                     left = i + 1;
                 } else {
+                    //之后的数比当前的数字都要小，即 left=left+1
                     if(isLarge && lcpArr[i] < lcpArr[lcpStart]) {
                         left = i;
                     }
@@ -136,13 +127,15 @@ void WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int
                         int times = (i - lcpStart) + 1 + j;
                         cout << "position:" << position << endl;
                         cout << "times:" << times << endl;
+                        vector<int> wordPosition = {position, times};
+                        wordRate.push_back(wordPosition);
                     }
                 }
                 break;
             }
         }
     }
-
+    return wordRate;
 }
 
 

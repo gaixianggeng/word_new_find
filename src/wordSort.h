@@ -1,15 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 using namespace std;
 
 class WordSort {
 public:
     vector<string> string2Arr(string);
-    vector<string> sortArr(vector<string>);
-    void scanLcp(vector<int>,int,int,int,int);
+    map<string, int> sortArr(vector<string>);
+    vector<vector<int>> scanLcp(vector<int>, int, int, int, int);
     void test();
-	void getWordListByScanLcp(vector<int>,int,int,int,int);
 private:
     int getCommonStrLength(string, string);
     vector<int> pat2LcpArr(vector<int>, vector<string>);

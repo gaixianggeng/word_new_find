@@ -28,8 +28,8 @@ vector<string> WordSort::sortArr(vector<string> wordList) {
         cout << word << ",";
     }
     cout << endl;
-	
-	scanLcp(lcpArr, lcpArr.size(), 0, 2, 6);
+
+    scanLcp(lcpArr, lcpArr.size(), 0, 2, 6);
     return wordList;
 }
 
@@ -42,6 +42,40 @@ vector<int> WordSort::pat2LcpArr(vector<int> patArr, vector<string> wordList) {
     }
     res.push_back(0);
     return res;
+}
+//通过lcp数组获取词频 new
+void WordSort::getWordListByScanLcp(vector<int> lcpArr, int count, int start, int minLen, int maxLen) {
+    while(start < count) {
+        int left = -1;
+        int right = -1;
+        int lcpStart = 0;
+        int length = 0;
+        for(int i = start; i < count; i++) {
+            if(lcpArr[i] >= minLen) {
+                left = i;
+            }
+            if (left != -1 && lcpArr[i] > lcpArr[left]) {
+                lcpStart = i;
+            }
+            if (left != -1 && lcpArr[i] < lcpArr[left]) {
+                right = i;
+            }
+
+        }
+		cout<<"left:"<<left<<" right:"<<right<<" lcpStart:"<<lcpStart<<endl;
+        if (lcpStart != -1 && lcpStart < right) {
+            start = lcpStart;
+        } else {
+            start = right;
+        }
+        if (left != -1 && right != -1) {
+            length = right - left + 1;
+        } else if (left == -1) {
+            length = 0;
+        } else if (left != -1 && right == -1) {
+            length = count - left;
+        }
+    }
 }
 
 
@@ -58,7 +92,7 @@ void WordSort::scanLcp(vector<int> lcpArr, int count, int start, int minLen, int
         int i = left;
 
         for (; i < count; i++) {
-            //查过成词的最大长度
+            //超过成词的最大长度
             if (lcpArr[i] > maxLen) {
                 left += 1;
                 break;

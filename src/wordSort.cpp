@@ -16,14 +16,16 @@ map<string, int> WordSort::sortArr(vector<string> wordList) {
         word = i;
         i++;
     }
-
+    for(auto word : wordList) {
+        cout << word  << endl;;
+    }
     quickSort(wordList, 0, wordList.size() - 1, patArr);
     for(auto word : patArr) {
         cout << word << ",";
     }
     cout << endl;
     for(auto word : wordList) {
-        cout << word << "," << endl;;
+        cout << word  << endl;;
     }
     cout << wordList.size() << endl;
     vector<int> lcpArr = pat2LcpArr(patArr, originWordList);
@@ -32,10 +34,11 @@ map<string, int> WordSort::sortArr(vector<string> wordList) {
     }
     cout << endl;
     map<string, int> cutWordList;
-    vector<vector<int>> wordRate = scanLcp(lcpArr, lcpArr.size(), 0, 2, 6);
+    vector<vector<int>> wordRate = scanLcp(lcpArr, lcpArr.size(), 0, 6, 15);
     for(auto wordPosition : wordRate) {
-        cout << wordList[wordPosition[0]] << endl;
-        string cutWord	= wordList[wordPosition[0]].substr(0, lcpArr[wordPosition[0]]);
+        //获取需要截图的query
+        string temp = wordList[wordPosition[0]];
+        string cutWord = temp.substr(0, lcpArr[wordPosition[0]]);
         cutWordList[cutWord] = wordPosition[1];
     }
 
@@ -44,7 +47,9 @@ map<string, int> WordSort::sortArr(vector<string> wordList) {
     for(iter = cutWordList.begin(); iter != cutWordList.end(); iter++) {
         cout << iter->first << " " << iter->second << endl;
     }
+    cout << cutWordList["中国"] << endl;
     cout << cutWordList["习近平"] << endl;
+    cout << cutWordList["近平"] << endl;
     return cutWordList;
 }
 
@@ -79,7 +84,7 @@ vector<vector<int>> WordSort::scanLcp(vector<int> lcpArr, int count, int start, 
 
         for (; i < count; i++) {
             //超过成词的最大长度
-            if (lcpArr[i] > maxLen) {
+            if (isFirst && lcpArr[i] > maxLen) {
                 left += 1;
                 break;
             }
@@ -152,10 +157,10 @@ void  WordSort::quickSort(vector<string>& wordList, int start, int end, vector<i
 
     while (left < right) {
         while(wordList[right] + target >= target + wordList[right] && right > left) {
-            right--;
+            right -= 1;
         }
         while (wordList[left] + target <= target + wordList[left] && left < right) {
-            left++;
+            left += 1;
         }
         string t  = wordList[left];
         wordList[left] = wordList[right];
@@ -180,7 +185,7 @@ vector<string> WordSort::string2Arr(string title) {
     vector<string> res;
     int length = title.length();
     cout << length << endl;
-    for(int i = 0; i < length; i += 1) {
+    for(int i = 0; i < length; i += 3) {
         string temp = title.substr(i, length - i);
         res.push_back(temp);
     }

@@ -1,6 +1,7 @@
 //实现标题数据抽词排序
 
 #include "wordSort.h"
+#include <cstdio>
 #include <cstdlib>
 #include <iterator>
 #include <map>
@@ -205,6 +206,31 @@ void WordSort::test() {
     cout << "test" << endl;
 }
 //单词切分后子串合并
-vector<string> strigListMerge(vector<string> wordCutList){
+vector<string> strigListMerge(vector<string> wordCutList) {
+    vector<string> res;
+    return  res;
+}
+//基数排序
+vector<int> WordSort::radixSort(string content) {
+    vector<int> charList;
+    int length = content.size();
+    int i = 0;
+    while (i < length) {
+        string str = content.substr(i, 3);
+        i += 3;
+        int sum = 0;
+        for (int i = 0; i < str.size(); i++) {
+            sum = sum * 16 * 16 + int{str[i]};
+        }
+    }
+    return charList;
+}
+vector<unsigned char> encode (const string s) {
+    string str = s;
+    vector<unsigned char> buff;
 
+    int len = str.length();
+    buff.resize(len);
+    memcpy(&buff[0], str.c_str(), len);
+    return buff;
 }

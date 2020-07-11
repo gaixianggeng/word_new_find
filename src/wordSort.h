@@ -9,6 +9,7 @@ public:
     vector<string> string2Arr(string);
     map<string, int> sortArr(vector<string>);
     vector<vector<int>> scanLcp(vector<int>, int, int, int, int);
+    vector<string> strigListMerge(vector<string>);
     void test();
 private:
     int getCommonStrLength(string, string);

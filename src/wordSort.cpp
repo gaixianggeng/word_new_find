@@ -204,3 +204,7 @@ int WordSort::getCommonStrLength(string str1, string str2) {
 void WordSort::test() {
     cout << "test" << endl;
 }
+//单词切分后子串合并
+vector<string> strigListMerge(vector<string> wordCutList){
+
+}

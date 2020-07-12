@@ -211,26 +211,34 @@ vector<string> strigListMerge(vector<string> wordCutList) {
     return  res;
 }
 //基数排序
-vector<int> WordSort::radixSort(string content) {
-    vector<int> charList;
+vector<int> WordSort::radixSort(vector<string>content) {
+    vector<int> res;
+    for(auto item : content) {
+        cout << item << endl;
+        vector<int> itemNumList = string2NumList(item);
+        for(auto item : itemNumList) {
+            cout << item<<" ";
+        }
+        cout << endl;
+    }
+    return res;
+}
+vector<int> WordSort::string2NumList(string content) {
+    vector<int> numList;
     int length = content.size();
     int i = 0;
     while (i < length) {
         string str = content.substr(i, 3);
         i += 3;
-        int sum = 0;
-        for (int i = 0; i < str.size(); i++) {
-            sum = sum * 16 * 16 + int{str[i]};
-        }
+        numList.push_back(encode(str));
     }
-    return charList;
+    return numList;
 }
-vector<unsigned char> encode (const string s) {
-    string str = s;
-    vector<unsigned char> buff;
-
-    int len = str.length();
-    buff.resize(len);
-    memcpy(&buff[0], str.c_str(), len);
-    return buff;
+int WordSort::encode (string str) {
+    int sum = 0;
+    for (int i = 0; i < str.size(); i++) {
+        unsigned int m = (unsigned int)(unsigned char)str[i];
+        sum = sum * 16 * 16 + m;
+    }
+    return sum;
 }

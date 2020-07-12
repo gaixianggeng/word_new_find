@@ -9,8 +9,8 @@ int main() {
     string demoStr = "hellohellohellolvlvlvgoogoodgood";
     string demoStr2 = "习近平强调面对疫情中国阿根廷人民同舟共济相互支持体现了两国人民的深厚情谊当前中国和阿根廷习近平强调习近平哈哈";
     WordSort ws;
-	ws.radixSort(demoStr2);
-	//vector<string> cutWordList = ws.string2Arr(demoStr);
+    vector<string> cutWordList = ws.string2Arr(demoStr2);
+    ws.radixSort(cutWordList);
     //ws.sortArr(cutWordList);
     //vector<int> lcpArr = {1, 1, 3, 2, 1, 0, 0, 2,0};
     //ws.scanLcp(lcpArr, lcpArr.size(), 0, 1, 5);

@@ -214,12 +214,7 @@ vector<string> strigListMerge(vector<string> wordCutList) {
 vector<int> WordSort::radixSort(vector<string>content) {
     vector<int> res;
     for(auto item : content) {
-        cout << item << endl;
         vector<int> itemNumList = string2NumList(item);
-        for(auto item : itemNumList) {
-            cout << item<<" ";
-        }
-        cout << endl;
     }
     return res;
 }

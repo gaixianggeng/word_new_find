@@ -1,8 +1,10 @@
 //实现标题数据抽词排序
 
 #include "wordSort.h"
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <iterator>
 #include <map>
 #include <string>
@@ -211,11 +213,19 @@ vector<string> strigListMerge(vector<string> wordCutList) {
     return  res;
 }
 //基数排序
-vector<int> WordSort::radixSort(vector<string>content) {
-    vector<int> res;
+vector<vector<int>> WordSort::radixSort(vector<string>content) {
+    vector<vector<int>> res;
+    int maxNum = 0;
     for(auto item : content) {
         vector<int> itemNumList = string2NumList(item);
+        res.push_back(itemNumList);
+        if (itemNumList.size() > maxNum) {
+            maxNum = itemNumList.size();
+        }
     }
+    printVec(res);
+    cout << "maxNum:" << maxNum << endl;
+    radixCode(res, maxNum);
     return res;
 }
 vector<int> WordSort::string2NumList(string content) {
@@ -236,4 +246,66 @@ int WordSort::encode (string str) {
         sum = sum * 16 * 16 + m;
     }
     return sum;
+}
+void radixCode(vector<vector<int>>& numList, int wordLength) {
+
+    int length = wordLength;
+    for(int n = 0; n < length; n++) {
+        int buckets[numList.size()];
+        map<int, vector<int>> bucketsMap;
+        memset(buckets, 0, sizeof(buckets));
+        for(int m = 0; m < numList.size(); m++) {
+            if (numList[m].size() > n) {
+                int tempNum = numList[m][n];
+                buckets[m] = tempNum;
+                bucketsMap[tempNum] = numList[m];
+            }
+        }
+        sort(buckets, buckets + numList.size());
+        for(auto i : buckets) {
+            cout << i << endl;
+        }
+
+        int k = 0;
+        for(auto n : buckets) {
+            numList[k++] = bucketsMap[n];
+        }
+
+    }
+    printVec(numList);
+}
+
+void printVec(vector<vector<int>> numList) {
+    for(auto l : numList) {
+        for (auto n : l) {
+            cout << n << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+
+void radix(vector<int>& numList) {
+    int max = 100;
+
+    for(int i = 1; max / i > 0; i = i * 10) {
+        int buckets[numList.size()][10];
+        memset(buckets, 0, sizeof(buckets));
+        for(int m = 0; m < numList.size(); m++) {
+            int num = (numList[m] / i) % 10;
+            buckets[m][num] = numList[m];
+        }
+        int k = 0;
+        for(int n = 0; n < 10; n++) {
+            for(int r = 0; r < numList.size(); r++) {
+                if (buckets[r][n] != 0) {
+                    numList[k++] = buckets[r][n];
+                }
+
+            }
+        }
+
+    }
+
 }

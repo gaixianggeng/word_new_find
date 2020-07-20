@@ -250,29 +250,44 @@ int WordSort::encode (string str) {
 void radixCode(vector<vector<int>>& numList, int wordLength) {
 
     int length = wordLength;
-    for(int n = 0; n < length; n++) {
-        int buckets[numList.size()];
-        map<int, vector<int>> bucketsMap;
-        memset(buckets, 0, sizeof(buckets));
+    for(int n = length - 1; n >= 0; n--) {
+        //vector<int> buckets[numList.size()][length];
+        vector<vector<int>> res;
+        map<int, map<string, vector<int>>> buckets;
+        vector<int>bucketsNum;
+        //memset(buckets, 0, sizeof(buckets));
+        cout << "test" << endl;
         for(int m = 0; m < numList.size(); m++) {
             if (numList[m].size() > n) {
                 int tempNum = numList[m][n];
-                buckets[m] = tempNum;
-                bucketsMap[tempNum] = numList[m];
+                bucketsNum.push_back(tempNum);
+                map<string, vector<int>> tempMap;
+                tempMap[to_string(tempNum)] = numList[m];
+                buckets[m] = tempMap;
             }
         }
-        sort(buckets, buckets + numList.size());
-        for(auto i : buckets) {
-            cout << i << endl;
+        sort(bucketsNum.begin(), bucketsNum.end());
+        for(auto i : bucketsNum) {
+            cout << i << " " ;
         }
+        cout << endl;
 
         int k = 0;
-        for(auto n : buckets) {
-            numList[k++] = bucketsMap[n];
+        for(auto n : bucketsNum) {
+            for(int i = 0; i < numList.size(); i++) {
+                if (buckets[i].find(to_string(n)) != buckets[i].end()) {
+					cout<<n<<endl;
+					cout<<i<<endl;
+                    res.push_back(buckets[i][to_string(n)]);
+					buckets[i].erase(to_string(n));
+                }
+            }
         }
 
+        cout << "----" << endl;
+        printVec(res);
+        cout << "----" << endl;
     }
-    printVec(numList);
 }
 
 void printVec(vector<vector<int>> numList) {

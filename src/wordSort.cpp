@@ -256,7 +256,6 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
         map<int, map<string, vector<int>>> buckets;
         vector<int>bucketsNum;
         //memset(buckets, 0, sizeof(buckets));
-        cout << "test" << endl;
         for(int m = 0; m < numList.size(); m++) {
             if (numList[m].size() > n) {
                 int tempNum = numList[m][n];
@@ -267,10 +266,10 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
             }
         }
         sort(bucketsNum.begin(), bucketsNum.end());
-        for(auto i : bucketsNum) {
-            cout << i << " " ;
-        }
-        cout << endl;
+        //for(auto i : bucketsNum) {
+        //    cout << i << " " ;
+        //}
+        //cout << endl;
 
         int k = 0;
         for(auto n : bucketsNum) {
@@ -283,7 +282,6 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
                 }
             }
         }
-
         cout << "----" << endl;
         printVec(res);
         cout << "----" << endl;

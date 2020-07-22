@@ -263,6 +263,8 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
                 map<string, vector<int>> tempMap;
                 tempMap[to_string(tempNum)] = numList[m];
                 buckets[m] = tempMap;
+            } else {
+                res.push_back(numList[m]);
             }
         }
         sort(bucketsNum.begin(), bucketsNum.end());
@@ -275,15 +277,13 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
         for(auto n : bucketsNum) {
             for(int i = 0; i < numList.size(); i++) {
                 if (buckets[i].find(to_string(n)) != buckets[i].end()) {
-					cout<<n<<endl;
-					cout<<i<<endl;
                     res.push_back(buckets[i][to_string(n)]);
-					buckets[i].erase(to_string(n));
+                    buckets[i].erase(to_string(n));
                 }
             }
         }
-        cout << "----" << endl;
         printVec(res);
+		numList = res;
         cout << "----" << endl;
     }
 }

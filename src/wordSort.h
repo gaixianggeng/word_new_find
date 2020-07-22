@@ -14,6 +14,7 @@ public:
     vector<string> strigListMerge(vector<string>);
     void test();
 private:
+	map<int, string> numStrMap;
     vector<int> string2NumList(string);
     int getCommonStrLength(string, string);
     vector<int> pat2LcpArr(vector<int>, vector<string>);

@@ -226,6 +226,16 @@ vector<vector<int>> WordSort::radixSort(vector<string>content) {
     printVec(res);
     cout << "maxNum:" << maxNum << endl;
     radixCode(res, maxNum);
+    printVec(res);
+
+    for(auto itemList : res) {
+        string temp = "";
+        for(auto item : itemList) {
+            temp += numStrMap[item];
+        }
+        cout << temp << endl;
+    }
+
     return res;
 }
 vector<int> WordSort::string2NumList(string content) {
@@ -245,17 +255,16 @@ int WordSort::encode (string str) {
         unsigned int m = (unsigned int)(unsigned char)str[i];
         sum = sum * 16 * 16 + m;
     }
+    numStrMap[sum] = str;
     return sum;
 }
 void radixCode(vector<vector<int>>& numList, int wordLength) {
 
     int length = wordLength;
     for(int n = length - 1; n >= 0; n--) {
-        //vector<int> buckets[numList.size()][length];
         vector<vector<int>> res;
         map<int, map<string, vector<int>>> buckets;
         vector<int>bucketsNum;
-        //memset(buckets, 0, sizeof(buckets));
         for(int m = 0; m < numList.size(); m++) {
             if (numList[m].size() > n) {
                 int tempNum = numList[m][n];
@@ -268,10 +277,6 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
             }
         }
         sort(bucketsNum.begin(), bucketsNum.end());
-        //for(auto i : bucketsNum) {
-        //    cout << i << " " ;
-        //}
-        //cout << endl;
 
         int k = 0;
         for(auto n : bucketsNum) {
@@ -282,9 +287,7 @@ void radixCode(vector<vector<int>>& numList, int wordLength) {
                 }
             }
         }
-        printVec(res);
-		numList = res;
-        cout << "----" << endl;
+        numList = res;
     }
 }
 
